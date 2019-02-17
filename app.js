@@ -1,6 +1,3 @@
-var input = document.getElementById('start');
-var searchBox = new google.maps.places.SearchBox(input);
-map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
 var express = require('express');
 var app = express();
@@ -10,5 +7,6 @@ var path = require('path');
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
+app.get('/maps.js');
 
 app.listen(8080);

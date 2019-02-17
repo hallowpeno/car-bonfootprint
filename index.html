@@ -30,8 +30,8 @@
               <tbody>
                 <tr>
                   <td>
-                    <div id="carMakeModel" style="display: block;">
-                      <select name="carMakeModelChoices" onchange="javascript:setTimeout('__doPostBack(\'carMakeModelChoices\',\'\')', 0)" id="carMakeModelChoices"
+                    <div style="display: block;">
+                      <select id="carMakeModel" name="carMakeModelChoices" onchange="javascript:setTimeout('__doPostBack(\'carMakeModelChoices\',\'\')', 0)" id="carMakeModelChoices"
                         class="dropbox">
                           <option value="JAGUAR I-PACE">JAGUAR I-PACE</option>
                           <option value="DODGE Challenger GT">DODGE Challenger GT</option>
@@ -71,9 +71,10 @@
         </tr>
       </tbody>
     </table>
-
-<!--     <button id="btn" type="button"> </button>> -->
-
+    <span>
+    	 You're Carbon FootPrint in grams is:
+    </span>
+    <input id="footprint" type="text" value=""> </input>
     <div id="floating-panel">
       <strong>Start:</strong>
         <input id="Start" class="controls" type="text" placeholder="Search Box">
@@ -83,7 +84,8 @@
     </div>
     <div id="right-panel"></div>
     <div id="map"></div>
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
 
 
     <script>
@@ -172,12 +174,11 @@
         document.getElementById('btn').addEventListener('click', onChangeHandler);
       }
 
-      var distance;
       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 
         var start = document.getElementById('Start').value;
         var end = document.getElementById('End').value;
-
+        var distance;
         directionsService.route({
           origin: start,
           destination: end,
@@ -187,19 +188,138 @@
             directionsDisplay.setDirections(response);
             console.log(response)
             distance = response.routes[0].legs[0].distance.text;
+            console.log(distance);
+            var carbon = getCarbon(document.getElementById('carMakeModel'), distance);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
+
         });
+        
+        
       }
 
-      function getDistance() {
-        return distance;
-      }
-//      function findCarbon() {
-//        return distance.parseInt() * carbonburnedpermile;
-//      }
+      function getCarbon(model, distance) {
+//       	const Http = new XMLHttpRequest();
+// const url='http://localhost:8080/maps.js';
+// Http.open("POST", url);
+// Http.send({
+// 	model: model
+// });
+// Http.onreadystatechange=(e)=>{
+// console.log(Http.responseText)
+		if (document.getElementById('carMakeModel').value === 'DODGE Challenger GT') {
+			console.log(distance);
+			distance = parseInt(distance)/21*8887;
+			document.getElementById('footprint').value = distance;
+		}
 
+      }
+
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawVisualization);
+  //     if(document.getElementById('carMakeModel').value === 'JAGUAR I-PACE'){
+  //     	google.charts.load('current', {'packages':['corechart']});
+		// google.charts.setOnLoadCallback(drawVisualization1);
+  //     } else if (document.getElementById('carMakeModel').value === 'DODGE Challenger GT'){
+  //     	google.charts.load('current', {'packages':['corechart']});
+  //     	google.chart.setOnLoadCallback(drawVisualization2);
+  //     } else {
+  //     	google.charts.load('current', {'packages':['corechart']});
+  //     	google.chart.setOnLoadCallback(drawVisualization3);
+  //     }
+      
+     
+
+     // function drawVisualization1() {
+     //   // Some raw data (not necessarily accurate)
+     //   var data = google.visualization.arrayToDataTable([
+     //     ['Model and Make',     'City MPG', 'Hwy MPG', 'Combo MPG','Average of all Make and Model Combo MPG'],
+     //     ['E-Pace P250',  21,         28,        24,            24.27],
+     //     ['E-Pace P300',  21,         27,        23,            24.27],
+     //     ['F-Pace',       26,         33,        29,            24.27],
+     //     ['F-Type Convertible', 20, 28, 23,  24.27],
+     //     ['F-Type Coupe', 23, 30, 26, 24.27],
+     //     ['F-Type R Convertible', 15, 23, 18, 24.27],
+     //     ['F-Type R Coupe', 15, 23, 18, 24.27],
+     //     ['F-Type S Convertible', 19, 27, 22, 24.27],
+     //     ['F-Type S Coupe', 18, 26, 21, 24.27],
+     //     ['F-Type SVR Convertible GEN2', 16, 24, 18, 24.27],
+     //     ['F-Type SVR Coupe GEN2', 16, 24, 18, 24.27],
+     //     ['I-PACE', 80, 72, 76, 24.27],
+     //     ['XE', 30, 40, 34, 24.27],
+     //     ['XF', 23, 33, 27, 24.27],
+     //     ['XF Sportbrake', 18, 25, 21, 24.27],
+     //     ['XJ', 17, 26, 20, 24.27],
+     //     ['XJL', 17, 25, 20, 24.27]
+     //   ]);
+
+     //   var options = {
+     //     title : 'MPG of Jaguar Cars',
+     //     vAxis: {title: 'MPG'},
+     //     hAxis: {title: 'Model'},
+     //     seriesType: 'bars',
+     //     series: {3: {type: 'line'}}
+     //   };
+
+     //   var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+     //   chart.draw(data, options);
+     // }
+
+	     // google.charts.load('current', {'packages':['corechart']});
+	     // google.charts.setOnLoadCallback(drawVisualization);
+
+	     function drawVisualization() {
+	       // Some raw data (not necessarily accurate)
+	       var data = google.visualization.arrayToDataTable([
+	         ['Model and Make',     'City MPG', 'Hwy MPG', 'Combo MPG','Average of all Make and Model Combo MPG'],
+	        ['Challenger',15, 23, 18, 24.27],
+	        ['Challenger GT', 18, 27, 21, 24.27],
+	        ['Challenger SRT', 13, 22, 16, 24.27],
+	        ['Charger', 19, 30, 23, 24.27],
+	        ['Charger SRT', 13, 22, 16, 24.27],
+	        ['Durango', 19, 26, 21, 24.27],
+	        ['Durango SRT', 13, 19, 15, 24.27],
+	        ['Grand Caravan', 17, 25, 20, 24.27]
+	      ]);
+
+	       var options = {
+	         title : 'MPG of DODGE Cars',
+	         vAxis: {title: 'MPG'},
+	         hAxis: {title: 'Model'},
+	         seriesType: 'bars',
+	         series: {3: {type: 'line'}}
+	       };
+
+	       var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+	       chart.draw(data, options);
+	     }
+	     // google.charts.load('current', {'packages':['corechart']});
+	     // google.charts.setOnLoadCallback(drawVisualization);
+
+	     // function drawVisualization3() {
+	     //   // Some raw data (not necessarily accurate)
+	     //   var data = google.visualization.arrayToDataTable([
+	     //     ['Model and Make',     'City MPG', 'Hwy MPG', 'Combo MPG','Average of all Make and Model Combo MPG'],
+	     //           ['4C', 24, 34, 28, 24.27],
+	     //    ['Guilia', 17, 24, 20, 24.27],
+	     //    ['Guilia AWD', 23, 31, 26, 24.27],
+	     //    ['Stelvio', 22, 29, 25, 24.27],
+	     //    ['Stelvio AWD', 17, 23, 19, 24,27]
+	     //  ]);
+
+	     //   var options = {
+	     //     title : 'MPG of ALFA Romeo Cars',
+	     //     vAxis: {title: 'MPG'},
+	     //     hAxis: {title: 'Model'},
+	     //     seriesType: 'bars',
+	     //     series: {3: {type: 'line'}}
+	     //   };
+
+	     //   var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+	     //   chart.draw(data, options);
+	     // }
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCo-c9LCtaVSuCbOw13yp-_mrGzSRVPZn8&libraries=places&callback=initAutocomplete">
